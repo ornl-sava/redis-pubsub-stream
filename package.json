@@ -1,5 +1,5 @@
 {
-    "name": "redis-stream"
+    "name": "redis-pubsub-stream"
   , "version": "0.0.1"
   , "description": "Use regular expressions to parse a stream into JSON"
   , "author": {
