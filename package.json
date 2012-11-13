@@ -1,7 +1,7 @@
 {
     "name": "redis-pubsub-stream"
   , "version": "0.0.1"
-  , "description": "Use regular expressions to parse a stream into JSON"
+  , "description": "stream items into a redis pubsub instance"
   , "author": {
       "name":"John Goodall"
     , "email":"jgoodall@ornl.gov"
@@ -27,11 +27,11 @@
   , "scripts" : {
       "test": "./node_modules/mocha/bin/mocha -R spec"
     , "watch": "./node_modules/mocha/bin/mocha -R min --watch"
-    , "docs": "./node_modules/dox-foundation/bin/dox-foundation > doc/api.html < redis-stream.js ; ./node_modules/mocha/bin/mocha -R markdown > doc/tests.md"
+    , "docs": "./node_modules/dox-foundation/bin/dox-foundation > doc/api.html < redis-pubsub-stream.js ; ./node_modules/mocha/bin/mocha -R markdown > doc/tests.md"
     }
-  , "main": "./redis-stream.js"
+  , "main": "./redis-pubsub-stream.js"
   , "dependencies": {
-      "moment": ">=1.7.0"
+      "redis": "@0.7.2"
   }
   , "devDependencies": {
       "mocha": ">=1.3.0"
@@ -42,8 +42,8 @@
   }
   , "repository": {
       "type": "git"
-    , "url": "https://graphex.ornl.gov/git/ojg"
+    , "url": "https://github.com/ornl-situ/redis-pubsub-stream.git"
   }
-  , "keywords": ["redis", "stream"]
+  , "keywords": ["redis", "stream", "pubsub"]
   , "engines": { "node": ">= 0.6.0 < 0.9.0" }
 }
