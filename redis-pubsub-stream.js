@@ -35,7 +35,7 @@ function RedisPubsubStream (opts) {
     opts.serverPort = 6379
   if(!opts.serverAddress)
     opts.serverAddress = "localhost"
-  if(opts.redisOpts)
+  if(opts.channel)
     this.channel = opts.channel
   else
     this.channel = "Default"
