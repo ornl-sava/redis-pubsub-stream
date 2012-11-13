@@ -8,19 +8,18 @@
 
 var Stream = require('stream').Stream
   , util = require('util')
-  , moment = require('moment')
   , redis = require('redis')
 
 var verbose = false //TODO meh.
 
-module.exports = RedisStream
+module.exports = RedisPubsubStream
 
-//RedisStream constructor available options: 
+//RedisPubsubStream constructor available options: 
 //  opts.channel        //name of the channel to publish messages
 //  opts.serverAddress  //address of redis server
 //  opts.serverPort     //port of redis server
 //  opts.redisOpts      //see https://github.com/mranney/node_redis#rediscreateclientport-host-options for options.
-function RedisStream (opts) {
+function RedisPubsubStream (opts) {
   this.writable = true
   this.readable = true
 
@@ -29,8 +28,17 @@ function RedisStream (opts) {
   this._buffer = ''
 
   Stream.call(this)
-  
-  this.channel = opts.channel
+
+  if (!opts)
+    opts = {}
+  if (!opts.serverPort)
+    opts.serverPort = 6379
+  if(!opts.serverAddress)
+    opts.serverAddress = "localhost"
+  if(opts.redisOpts)
+    this.channel = opts.channel
+  else
+    this.channel = "Default"
   var redisOpts = {}
   if(opts.redisOpts) redisOpts = opts.redisOpts
 
@@ -39,16 +47,16 @@ function RedisStream (opts) {
   return this
 }
 
-util.inherits(RedisStream, Stream)
+util.inherits(RedisPubsubStream, Stream)
 
 // assumes UTF-8
-RedisStream.prototype.write = function (record) {
+RedisPubsubStream.prototype.write = function (record) {
   // cannot write to a stream after it has ended
   if ( this._ended ) 
-    throw new Error('RedisStream: write after end')
+    throw new Error('RedisPubsubStream: write after end')
 
   if ( ! this.writable ) 
-    throw new Error('RedisStream: not a writable stream')
+    throw new Error('RedisPubsubStream: not a writable stream')
   
   if ( this._paused ) 
     return false
@@ -62,7 +70,7 @@ RedisStream.prototype.write = function (record) {
   return true  
 }
 
-RedisStream.prototype.end = function (str) {
+RedisPubsubStream.prototype.end = function (str) {
   if ( this._ended ) return
   
   if ( ! this.writable ) return
@@ -78,21 +86,21 @@ RedisStream.prototype.end = function (str) {
   this.emit('close')
 }
 
-RedisStream.prototype.pause = function () {
+RedisPubsubStream.prototype.pause = function () {
   if ( this._paused ) return
   
   this._paused = true
   this.emit('pause')
 }
 
-RedisStream.prototype.resume = function () {
+RedisPubsubStream.prototype.resume = function () {
   if ( this._paused ) {
     this._paused = false
     this.emit('drain')
   }
 }
 
-RedisStream.prototype.destroy = function () {
+RedisPubsubStream.prototype.destroy = function () {
   if ( this._destroyed ) return
   
   this._destroyed = true
@@ -105,6 +113,6 @@ RedisStream.prototype.destroy = function () {
   this.emit('close')
 }
 
-RedisStream.prototype.flush = function () {
+RedisPubsubStream.prototype.flush = function () {
   this.emit('flush')
 }
