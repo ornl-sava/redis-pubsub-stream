@@ -47,8 +47,6 @@ describe('redis pubsub stream Tests', function() {
 
 }) 
 
-//TODO - test invalid code, blank lines at end, etc.
-
 var pauseUnpauseStream = function (done) {
   var opts = { channel:"pauseUnpauseStreamTest"      //name of the channel to publish messages
       , serverAddress: "localhost"  //address of redis server
