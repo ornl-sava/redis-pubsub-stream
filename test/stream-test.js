@@ -58,7 +58,7 @@ var pauseUnpauseStream = function (done) {
     .pipe(tester.createPauseStream())  
   setTimeout(function(){
     done()
-  }, 500) //need some time here so that pipelines can empty and whatnot before moving on to other tests
+  }, 1500) //need some time here so that pipelines can empty and whatnot before moving on to other tests
 }
 
 var simplePubsub = function (done) {
@@ -88,7 +88,7 @@ var simplePubsub = function (done) {
     setTimeout(function(){
       result.should.eql(data)
       done()
-    }, 500) //just need some time to receive and handle the messages returning to rc obj above.
+    }, 1500) //just need some time to receive and handle the messages returning to rc obj above.
   })
  
 }
