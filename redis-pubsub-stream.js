@@ -49,7 +49,15 @@ function RedisPubsubStream (opts) {
 
 util.inherits(RedisPubsubStream, Stream)
 
-// assumes UTF-8
+/**
+ *
+ * Parse a chunk and emit the parsed data. Implements writable stream method [stream.write(string)](http://nodejs.org/docs/latest/api/stream.html#stream_stream_write_string_encoding)
+ * Assumes UTF-8
+ * 
+ * @param {String} data to write to stream (assumes UTF-8)
+ * @return {boolean} true if written, false if it will be sent later
+ *
+ */
 RedisPubsubStream.prototype.write = function (record) {
   // cannot write to a stream after it has ended
   if ( this._ended ) 
@@ -70,6 +78,13 @@ RedisPubsubStream.prototype.write = function (record) {
   return true  
 }
 
+/*
+ *
+ * Write optional parameter and terminate the stream, allowing queued write data to be sent before closing the stream. Implements writable stream method [stream.end(string)](http://nodejs.org/docs/latest/api/stream.html#stream_stream_end)
+ *
+ * @param {String} data The data to write to stream (assumes UTF-8)
+ *
+ */
 RedisPubsubStream.prototype.end = function (str) {
   if ( this._ended ) return
   
@@ -86,6 +101,11 @@ RedisPubsubStream.prototype.end = function (str) {
   this.emit('close')
 }
 
+/*
+ *
+ * Pause the stream. Implements readable stream method [stream.pause()](http://nodejs.org/docs/latest/api/stream.html#stream_stream_pause)
+ *
+ */
 RedisPubsubStream.prototype.pause = function () {
   if ( this._paused ) return
   
@@ -93,6 +113,11 @@ RedisPubsubStream.prototype.pause = function () {
   this.emit('pause')
 }
 
+/*
+ *
+ * Resume stream after a pause, emitting a drain. Implements readable stream method [stream.resume()](http://nodejs.org/docs/latest/api/stream.html#stream_stream_resume)
+ *
+ */
 RedisPubsubStream.prototype.resume = function () {
   if ( this._paused ) {
     this._paused = false
@@ -100,6 +125,12 @@ RedisPubsubStream.prototype.resume = function () {
   }
 }
 
+
+/*
+ *
+ * Destroy the stream. Stream is no longer writable nor readable. Implements writable stream method [stream.destroy()](http://nodejs.org/docs/latest/api/stream.html#stream_stream_destroy_1)
+ *
+ */
 RedisPubsubStream.prototype.destroy = function () {
   if ( this._destroyed ) return
   
