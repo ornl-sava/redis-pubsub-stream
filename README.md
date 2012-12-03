@@ -3,7 +3,7 @@
 
 # Send a stream of items to Redis as PubSub events
 
-This module will take in objects or strings as a [stream](http://nodejs.org/docs/latest/api/stream.html), and send it to redis as a pubsub message.
+This module will take in objects or strings as a [stream](http://nodejs.org/docs/latest/api/stream.html), and send it to [Redis](http://redis.io/) as a [pubsub](http://redis.io/topics/pubsub) message.
 
 ## Install
 
@@ -13,10 +13,12 @@ npm install redis-pubsub-stream
 
 The RedisPubsubStream constructor should be passed an opts object as its argument, similar to the following:
 
-    var opts = { channel:"Test" 
+    var opts = { 
+          channel:"Test" 
         , serverAddress: "localhost" 
         , serverPort:6379 
-        , redisOpts: {} }
+        , redisOpts: {} 
+      }
 
 Where `channel` is the name of the channel to publish messages, `serverAddress` is the address of Redis server, and `port` is the port on which the Redis server is listening.
 
@@ -28,30 +30,33 @@ For each incoming message, this module will output a corresponding pubsub messag
 
 This example (based on one of the test cases) reads in a json file with an array of items, parses them, and sends each items to the pubsub stream. 
 
-    var RedisPubsubStream = require('../redis-pubsub-stream.js')
+    var RedisPubsubStream = require('redis-pubsub-stream')
       , fs = require('fs')
       , path = require('path')
 
     var inFile = path.join('test', 'input', 'simpleData.json')
-      , opts = { channel:"simplePubsubTest" 
+      , opts = { 
+          channel:"simplePubsubTest" 
         , serverAddress: "localhost" 
         , serverPort:6379 
-        , redisOpts: {} }
+        , redisOpts: {}
+      }
 
-    var pubsub = new RedisPubsubStream(opts)
+    var pubsubStream = new RedisPubsubStream(opts)
 
     fs.readFile(inFile, function (err, data) {
       if (err) throw err
       data = JSON.parse(data)
       for(var i=0; i<data.length; i++){
-        pubsub.write(data[i]);
+        pubsubStream.write(data[i]);
       }
     })
 
-Rather than sending items with .write(), a more typical example may simply pipe several streams together, for example:
+Rather than sending items with .write(), a more typical example may simply pipe several streams together. The following example reads from a file, `data.txt`, parses the text using [regexStream](https://github.com/ornl-situ/regex-stream), and sends the parsed output to a Redis pubsub channel:
 
-    var util = require('util')
+    var RedisPubsubStream = require('redis-pubsub-stream')
       , RegexStream = require('regex-stream')
+      , util = require('util')
 
     var input = require('fs').createReadStream('./data.txt', {encoding:'utf-8'})
       , parser = {
@@ -66,13 +71,11 @@ Rather than sending items with .write(), a more typical example may simply pipe 
         , serverPort:6379 
         , redisOpts: {} }
 
-    var pubsub = new RedisPubsubStream(opts)
+    var pubsubStream = new RedisPubsubStream(opts)
 
     // pipe data from input file to the regexStream parser to redis pubsub
     input.pipe(regexStream)
-    regexStream.pipe(pubsub)
-
-This example will create a file stream, use the [regexStream](https://github.com/ornl-situ/regex-stream) instance to parse its items, and then pipe that output into the RedisPubsubStream instance.
+    regexStream.pipe(pubsubStream)
 
 See the test cases for some usage examples.
 
