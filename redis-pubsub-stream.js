@@ -1,7 +1,5 @@
 /*
-  This module will transform a string into JSON string
-  It will input a stream, parse it according to a 
-  regular expression and output to a stream
+  Node.js module to send a stream of items to a Redis pubsub channel
 */
 
 'use strict';
