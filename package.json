@@ -25,8 +25,8 @@
     }
   , "private": true
   , "scripts" : {
-      "test": "./node_modules/mocha/bin/mocha -R spec -s 2000 -t 5000"
-    , "watch": "./node_modules/mocha/bin/mocha -R min --watch"
+      "test": "./node_modules/mocha/bin/mocha -R spec --slow 4000 --timeout 10000"
+    , "watch": "./node_modules/mocha/bin/mocha -R min --slow 4000 --timeout 10000 --watch"
     , "docs": "./node_modules/dox-foundation/bin/dox-foundation > doc/api.html < redis-pubsub-stream.js ; ./node_modules/mocha/bin/mocha -R markdown > doc/tests.md"
     }
   , "main": "./redis-pubsub-stream.js"
