@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/ornl-situ/redis-pubsub-stream.png?branch=master)](https://travis-ci.org/ornl-situ/redis-pubsub-stream)
+[![Build Status](https://travis-ci.org/ornl-sava/redis-pubsub-stream.png?branch=master)](https://travis-ci.org/ornl-sava/redis-pubsub-stream)
 
 
 # Send a stream of items to Redis as PubSub events
