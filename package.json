@@ -25,7 +25,7 @@
     }
   , "private": true
   , "scripts" : {
-      "test": "./node_modules/mocha/bin/mocha -R spec"
+      "test": "./node_modules/mocha/bin/mocha -R spec -s 2000 -t 5000"
     , "watch": "./node_modules/mocha/bin/mocha -R min --watch"
     , "docs": "./node_modules/dox-foundation/bin/dox-foundation > doc/api.html < redis-pubsub-stream.js ; ./node_modules/mocha/bin/mocha -R markdown > doc/tests.md"
     }
